@@ -8,7 +8,7 @@ const db = mysql.createConnection({
     database: "employee_db",
 });
 
-chooseOption = (type) => {
+const chooseOption = (type) => {
     switch (type) {
         case 'VIEW ALL EMPLOYEES': {
             db.query('SELECT * FROM employee', (err, employee) => {
