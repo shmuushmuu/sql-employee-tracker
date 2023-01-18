@@ -30,11 +30,11 @@
         -- Wyatt Dewthat --
 
 INSERT INTO department (name)
-    VALUES
-    ('Engineering'), -- 1
-    ('Accounting'), -- 2
-    ('Sales'), -- 3
-    ('Human Resources'); -- 4
+VALUES
+('Engineering'), -- 1
+('Accounting'), -- 2
+('Sales'), -- 3
+('Human Resources'); -- 4
 
 INSERT INTO role (title, salary, department_id)
 VALUES
@@ -52,18 +52,18 @@ VALUES
 
 CREATE TABLE employee (first_name, last_name, role_id, manager_id)
 VALUES
-('Pernel', 'Irinei', 1),
-('Seth', 'Smith', 2),
-('Sansa', 'Brady', 2),
-('Roxanne', 'Johnson', 3),
-('Lexy', 'Miloslava', 4),
-('Agnes', 'Martinez', 5),
-('Julio', 'Silva', 5),
-('Margaret', 'Heraclius', 6),
-('Dylan', 'Watanabe', 7),
-('Elijah', 'Weathers', 8),
-('Colin', 'Riches', 8),
-('Kristine', 'Welsh', 9),
-('Job', 'Stephens', 10),
-('Vince', 'McGilly', 11),
-('Wyatt', 'Dewthat', 11),
+('Pernel', 'Irinei', 1, null),
+('Seth', 'Smith', 2, 1),
+('Sansa', 'Brady', 2, 1),
+('Roxanne', 'Johnson', 3, 1),
+('Lexy', 'Miloslava', 4, null),
+('Agnes', 'Martinez', 5, 4),
+('Julio', 'Silva', 5, 4),
+('Margaret', 'Heraclius', 6, 4),
+('Dylan', 'Watanabe', 7, null),
+('Elijah', 'Weathers', 8, 7),
+('Colin', 'Riches', 8, 7),
+('Kristine', 'Welsh', 9, 7),
+('Job', 'Stephens', 10, null),
+('Vince', 'McGilly', 11, 10),
+('Wyatt', 'Dewthat', 11, 10),
