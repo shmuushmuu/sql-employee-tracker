@@ -1,34 +1,4 @@
--- Engineering --
-    -- Lead Engineer --
-        -- Pernel Irinei --
-    -- Senior Engineer --
-        -- Seth Smith --
-        -- Sansa Brady --
-    -- Junior Engineer --
-        -- Roxanne Johnson --
--- Accounting --
-    -- CFO --
-        -- Lexy Miloslava --
-    -- CMA --
-        -- Agnes Martinez --
-        -- Julio Silva --
-    -- Comptroller --
-        -- Margaret Heraclius --
--- Sales --
-    -- Sales Manager --
-        -- Dylan Watanabe --
-    -- Senior Salesperson --
-        -- Elijah Weathers --
-        -- Colin Riches --
-    -- Junior Salesperson --
-        -- Kristine Welsh --
--- Human Resources --
-    -- Director --
-        -- Job Stephens --
-    -- Specialist --
-        -- Vince McGilly --
-        -- Wyatt Dewthat --
-
+USE employee_db;
 INSERT INTO department (name)
 VALUES
 ('Engineering'), -- 1
@@ -50,7 +20,7 @@ VALUES
 ('H.R. Director', 150000, 4), -- 10 --
 ('H.R. Specialist', 90000, 4); -- 11 --
 
-CREATE TABLE employee (first_name, last_name, role_id, manager_id)
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
 ('Pernel', 'Irinei', 1, null),
 ('Seth', 'Smith', 2, 1),
@@ -66,4 +36,4 @@ VALUES
 ('Kristine', 'Welsh', 9, 7),
 ('Job', 'Stephens', 10, null),
 ('Vince', 'McGilly', 11, 10),
-('Wyatt', 'Dewthat', 11, 10),
+('Wyatt', 'Dewthat', 11, 10);
