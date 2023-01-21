@@ -22,8 +22,45 @@ const addEmployee = async () => {
         let fullName = employeeResults[i].first_name + ' ' + employeeResults[i].last_name;
         employeeResults.push(fullName);
     }
+    managerId = employeeResults;
 
-}
+    prompt([
+    {
+        name: 'firstName',
+        message: 'What is the new employee`s first name?'
+    },
+    {
+        name: 'lasstName',
+        message: 'What is the new employee`s last name?'
+    },
+    {
+        type: 'rawlist',
+        name: 'employeeRole',
+        message: 'Which role does this new employee fill?',
+        choices: roles
+    },
+    {
+        type: 'rawlist',
+        name: 'employeeManager',
+        message: 'Who is the manager for the new employee?',
+        choices: 'employees'
+    }
+])
+    .then(({ firstName, lastName, employeeRole, employeeManager }) => {
+        roles = id.filter((one) => one.title === employeeRole)
+        let managerId = employeeManager.split(' ').shift();
+        employees = managerId.filter((one) => one.first_name === managerId)
+
+        db.query('INSERT INTO employees SET first_name="${firstName}", last_name="${lastName}", role_id="${roles[0].id}", manager_id="${employees[0].id}"')
+        db.query(allEmployees, (err, results) => {
+            console.table(results, 'Employee has been added!')
+            employee = [];
+            roles = [];
+            init (); 
+        })
+    });
+
+};
 
 const chooseOption = (type) => {
     switch (type) {
