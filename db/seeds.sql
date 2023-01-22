@@ -37,3 +37,7 @@ VALUES
 ('Job', 'Stephens', 10, null),
 ('Vince', 'McGilly', 11, 10),
 ('Wyatt', 'Dewthat', 11, 10);
+
+SELECT role.id, role.title, role.salary FROM role ORDER by role.id;
+SELECT role.id, role.title FROM role ORDER BY role.id;
+SELECT * FROM employee;
