@@ -92,6 +92,16 @@ const addRole = async () => {
 });
 };
 
+const addDepartment = () => {
+    prompt([{
+        name: 'department_title',
+        message: 'What is the name of this new department?'
+    },
+])
+.then((answers) => {
+    insert('department', answers);
+})
+}
 
 const chooseOption = (type) => {
     switch (type) {
@@ -111,8 +121,19 @@ const chooseOption = (type) => {
             addEmployee();
             break;
         }
+        case 'Add Department': {
+            addDepartment();
+            break;
+        }
         case 'Add Role': {
             addRole();
+            break;
+        }
+        case 'View Department Payrole': {
+            db.query('SELECT SUM(quantity) AS total_in_salaries FROM department GROUP BY section', function (err, results) {
+                console.log(results);
+                init();
+            });
             break;
         }
     }
@@ -127,6 +148,9 @@ const init = () => {
             'View All Departments',
             'View All Roles',
             'Add Employee',
+            'Add Department',
+            'Add Rolee',
+            'View Department Payrole'
         ],
         name: 'type',
     })
