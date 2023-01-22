@@ -65,11 +65,10 @@ const addEmployee = async () => {
 };
 
 const addRole = async () => {
-    const [roleData] = await selectAll('role');
     const departments = departmentData.map(department => {
         return {
-            name: role.title,
-            value: role.id
+            name: department.title,
+            value: department.id
         }
     });
     prompt([
