@@ -10,72 +10,33 @@ const db = mysql.createConnection({
     console.log(`Connected to the employee_db`)
 );
 
-// const addEmployee = async () => {
-//     const [responses] = await db.promise().query('SELECT id, title FROM roles');
-//     for (let i = 0; i < responses.length; i++) {
-//         let role = responses[i].title;
-//         roles.push(role);
-//     }
-//     id = results;
-//     const [employeeResults] = await db.promise().query('SELECT id, first_name, last_name FROM employees');
-//     for (let i = 0; i < employeeResults.length; i++) {
-//         let fullName = employeeResults[i].first_name + ' ' + employeeResults[i].last_name;
-//         employeeResults.push(fullName);
-//     }
-//     managerId = employeeResults;
-
-//     prompt([
-//         {
-//             name: 'firstName',
-//             message: 'What is the new employee`s first name?'
-//         },
-//         {
-//             name: 'lastName',
-//             message: 'What is the new employee`s last name?'
-//         },
-//         {
-//             type: 'rawlist',
-//             name: 'employeeRole',
-//             message: 'Which role does this new employee fill?',
-//             choices: roles
-//         },
-//         {
-//             type: 'rawlist',
-//             name: 'employeeManager',
-//             message: 'Who is the manager for the new employee?',
-//             choices: 'employees'
-//         }
-//     ])
-//         .then(({ firstName, lastName, employeeRole, employeeManager }) => {
-//             roles = id.filter((one) => one.title === employeeRole)
-//             let managerId = employeeManager.split(' ').shift();
-//             employees = managerId.filter((one) => one.first_name === managerId)
-
-//             db.query(`INSERT INTO employees SET first_name="${firstName}", last_name="${lastName}", role_id="${roles[0].id}", manager_id="${employees[0].id}"`)
-//             db.query(allEmployees, (err, results) => {
-//                 console.table(results, 'Employee has been added!')
-//                 employee = [];
-//                 roles = [];
-//                 init();
-//             })
-//         });
-//
-//};
-
 const selectAll = (table) => {
-    return db.promise.query('SELECT * FROM' + table)
+    return db.promise().query('SELECT * FROM ' + table);
 };
 
 const insert = (table, data) => {
     db.query('INSERT INTO ?? SET ?', [table, data], (err) => {
-        if (!err) return console.error(err);
+        if (err) return console.error(err);
         console.log('\nSuccessfully created employee!\n');
         init();
     });
 };
 
 const addEmployee = async () => {
-    const [roles] = await selectAll('role');
+    const [roleData] = await selectAll('role');
+    const [employeeData] = await selectAll('employee');
+    const roles = roleData.map(role => {
+        return {
+            name: role.title,
+            value: role.id
+        }
+    });
+    const managers = employeeData.map(employee => {
+        return {
+            name: employee.first_name + ' ' + employee.last_name,
+            value: employee.id
+        }
+    });
     prompt([
         {
             name: 'first_name',
@@ -85,45 +46,74 @@ const addEmployee = async () => {
             name: 'last_name',
             message: 'What is the new employee`s last name?'
         },
+        {
+            type: 'rawlist',
+            name: 'role_id',
+            message: 'What is the new employee`s role?',
+            choices: roles,
+        },
+        {
+            type: 'rawlist',
+            name: 'manager_id',
+            message: 'Who is the new employee`s manager?',
+            choices: managers,
+        }
     ])
         .then((answers) => {
             insert('employee', answers);
         });
 };
 
+const addRole = async () => {
+    const [roleData] = await selectAll('role');
+    const departments = departmentData.map(department => {
+        return {
+            name: role.title,
+            value: role.id
+        }
+    });
+    prompt([
+    {
+        name: 'role_title',
+        message: 'What is the new role`s title?'
+    },
+    {
+        name: 'role_salary',
+        message: 'What is the salary for the new role?'
+    },
+    {
+        type: 'rawlist',
+        name: 'department',
+        message: 'What department does this new role belong to?',
+        choices: departments,
+    },
+])
+.then((answers) => {
+    insert('role', answers);
+});
+};
+
+
 const chooseOption = (type) => {
     switch (type) {
-        case 'VIEW ALL EMPLOYEES': {
-            db.query('SELECT * FROM employee', (err, employee) => {
-                console.table(employee);
-                init();
-            });
+        case 'View All Employees': {
+            selectAll('employee');
             break;
         }
-        case 'VIEW ALL DEPARTMENTS': {
-            db.query('SELECT * FROM department', (err, department) => {
-                console.table(department);
-                init();
-            });
+        case 'View All Departments': {
+            selectAll('department');
             break;
         }
-        case 'VIEW ALL ROLES': {
-            db.query('SELECT * FROM role', (err, roles) => {
-                console.table(roles);
-                init();
-            });
+        case 'View All Roles': {
+            selectAll('roles');
             break;
         }
-        case 'FIND TOTAL SALARIES PER DEPO': {
-            db.query('SELECT SUM(quantity) AS total_in_salaries FROM department GROUP BY section', function (err, results) {
-                console.log(results);
-                init();
-            });
-            break;
-        }
-        case 'ADD EMPLOYEE': {
+        case 'Add Employee': {
             addEmployee();
-            init();
+            break;
+        }
+        case 'Add Role': {
+            addRole();
             break;
         }
     }
@@ -133,16 +123,13 @@ const init = () => {
     prompt({
         type: 'rawlist',
         message: 'Choose one of the following categories to interact with',
-        name: 'type',
         choices: [
-            'VIEW ALL EMPLOYEES',
-            'VIEW ALL DEPARTMENTS',
-            'VIEW ALL ROLES',
-            'VIEW DEPARTMENT PAYROLE',
-            'ADD EMPLOYEE',
-            'ADD DEPARTMENT',
-            'ADD ROLE'
+            'View All Employees',
+            'View All Departments',
+            'View All Roles',
+            'Add Employee',
         ],
+        name: 'type',
     })
         .then((answers) => {
             chooseOption(answers.type)
