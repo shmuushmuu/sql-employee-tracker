@@ -10,8 +10,8 @@ const db = mysql.createConnection({
     console.log(`Connected to the employee_db`)
 );
 
-const selectAll = (table) => {
-    return db.promise().query('SELECT * FROM ' + table);
+const selectAll = async(table) => {
+    return await db.promise().query('SELECT * FROM ' + table);
 };
 
 const insert = (table, data) => {
@@ -37,7 +37,7 @@ const addEmployee = async () => {
             value: employee.id
         }
     });
-    prompt([
+    const answers = await prompt([
         {
             name: 'first_name',
             message: 'What is the new employee`s first name?'
@@ -59,9 +59,10 @@ const addEmployee = async () => {
             choices: managers,
         }
     ])
-        .then((answers) => {
-            insert('employee', answers);
-        });
+        // .then((answers) => {
+        //     insert('employee', answers);
+        // });
+        insert('employee', answers);
 };
 
 const addRole = async () => {
@@ -71,62 +72,73 @@ const addRole = async () => {
             value: department.id
         }
     });
-    prompt([
-    {
-        name: 'role_title',
-        message: 'What is the new role`s title?'
-    },
-    {
-        name: 'role_salary',
-        message: 'What is the salary for the new role?'
-    },
-    {
-        type: 'rawlist',
-        name: 'department',
-        message: 'What department does this new role belong to?',
-        choices: departments,
-    },
-])
-.then((answers) => {
+    const answers = await prompt([
+        {
+            name: 'role_title',
+            message: 'What is the new role`s title?'
+        },
+        {
+            name: 'role_salary',
+            message: 'What is the salary for the new role?'
+        },
+        {
+            type: 'rawlist',
+            name: 'department',
+            message: 'What department does this new role belong to?',
+            choices: departments,
+        },
+    ])
+        // .then((answers) => {
+        //     insert('role', answers);
+        // });
     insert('role', answers);
-});
 };
 
-const addDepartment = () => {
-    prompt([{
+const addDepartment = async () => {
+    const answers = await prompt([{
         name: 'department_title',
         message: 'What is the name of this new department?'
     },
-])
-.then((answers) => {
+    ])
+        //.then((answers) => {
+        //     insert('department', answers);
+        // })
     insert('department', answers);
-})
 }
 
-const chooseOption = (type) => {
+const chooseOption = async(type) => {
     switch (type) {
         case 'View All Employees': {
-            selectAll('employee');
+            const [data] = await selectAll('employee');
+            console.table(data);
+            init();
             break;
         }
         case 'View All Departments': {
-            selectAll('department');
+            const [data] = await selectAll('department');
+            console.table(data);
+            init();
             break;
         }
         case 'View All Roles': {
-            selectAll('roles');
+            const [data] = await selectAll('role');
+            console.table(data);
+            init();
             break;
         }
         case 'Add Employee': {
-            addEmployee();
+            await addEmployee();
+            init();
             break;
         }
         case 'Add Department': {
-            addDepartment();
+            await addDepartment();
+            init();
             break;
         }
         case 'Add Role': {
-            addRole();
+            await addRole();
+            init();
             break;
         }
         case 'View Department Payrole': {
@@ -139,8 +151,8 @@ const chooseOption = (type) => {
     }
 }
 
-const init = () => {
-    prompt({
+const init = async() => {
+    const answers = await prompt({
         type: 'rawlist',
         message: 'Choose one of the following categories to interact with',
         choices: [
@@ -154,9 +166,7 @@ const init = () => {
         ],
         name: 'type',
     })
-        .then((answers) => {
-            chooseOption(answers.type)
-        });
+    chooseOption(answers.type)
 }
 
 init();
