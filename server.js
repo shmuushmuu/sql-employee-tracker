@@ -67,7 +67,7 @@ const addEmployee = async () => {
 
 const addRole = async () => {
     const [departmentData] = await selectAll('department');
-    const [roleData] = await selectAll('role');
+    // const [roleData] = await selectAll('role');
     const departments = departmentData.map(department => {
         return {
             name: department.name,
@@ -85,7 +85,7 @@ const addRole = async () => {
         },
         {
             type: 'rawlist',
-            name: 'department',
+            name: 'department_id',
             message: 'What department does this new role belong to?',
             choices: departments,
         },
