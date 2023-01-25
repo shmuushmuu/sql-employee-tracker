@@ -144,7 +144,7 @@ const chooseOption = async (type) => {
             break;
         }
         case 'View Department Payrole': {
-            db.query('SELECT SUM(quantity) AS total_in_salaries FROM department GROUP BY section', function (err, results) {
+            db.query('SELECT SUM(quantity) AS total_in_salary FROM role GROUP BY department_id', function (err, results) {
                 console.log(results);
                 init();
             });
