@@ -10,14 +10,14 @@ const db = mysql.createConnection({
     console.log(`Connected to the employee_db`)
 );
 
-const selectAll = async(table) => {
+const selectAll = async (table) => {
     return await db.promise().query('SELECT * FROM ' + table);
 };
 
 const insert = (table, data) => {
     db.query('INSERT INTO ?? SET ?', [table, data], (err) => {
         if (err) return console.error(err);
-        console.log('\nSuccessfully created employee!\n');
+        console.log('\nSuccessfully created!\n');
         init();
     });
 };
@@ -59,26 +59,28 @@ const addEmployee = async () => {
             choices: managers,
         }
     ])
-        // .then((answers) => {
-        //     insert('employee', answers);
-        // });
-        insert('employee', answers);
+    // .then((answers) => {
+    //     insert('employee', answers);
+    // });
+    insert('employee', answers);
 };
 
 const addRole = async () => {
+    const [departmentData] = await selectAll('department');
+    const [roleData] = await selectAll('role');
     const departments = departmentData.map(department => {
         return {
-            name: department.title,
+            name: department.name,
             value: department.id
         }
     });
     const answers = await prompt([
         {
-            name: 'role_title',
+            name: 'title',
             message: 'What is the new role`s title?'
         },
         {
-            name: 'role_salary',
+            name: 'salary',
             message: 'What is the salary for the new role?'
         },
         {
@@ -88,25 +90,25 @@ const addRole = async () => {
             choices: departments,
         },
     ])
-        // .then((answers) => {
-        //     insert('role', answers);
-        // });
+    // .then((answers) => {
+    //     insert('role', answers);
+    // });
     insert('role', answers);
 };
 
 const addDepartment = async () => {
     const answers = await prompt([{
-        name: 'department_title',
+        name: 'name',
         message: 'What is the name of this new department?'
-    },
+    }
     ])
-        //.then((answers) => {
-        //     insert('department', answers);
-        // })
+    //.then((answers) => {
+    //     insert('department', answers);
+    // })
     insert('department', answers);
 }
 
-const chooseOption = async(type) => {
+const chooseOption = async (type) => {
     switch (type) {
         case 'View All Employees': {
             const [data] = await selectAll('employee');
@@ -151,7 +153,7 @@ const chooseOption = async(type) => {
     }
 }
 
-const init = async() => {
+const init = async () => {
     const answers = await prompt({
         type: 'rawlist',
         message: 'Choose one of the following categories to interact with',
@@ -161,7 +163,7 @@ const init = async() => {
             'View All Roles',
             'Add Employee',
             'Add Department',
-            'Add Rolee',
+            'Add Role',
             'View Department Payrole'
         ],
         name: 'type',
