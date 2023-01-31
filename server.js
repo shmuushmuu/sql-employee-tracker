@@ -143,13 +143,13 @@ const chooseOption = async (type) => {
             init();
             break;
         }
-        case 'View Department Payrole': {
-            db.query('SELECT SUM(quantity) AS total_in_salary FROM role GROUP BY department_id', function (err, results) {
-                console.log(results);
-                init();
-            });
-            break;
-        }
+        // case 'View Department Payrole': {
+        //     db.query('SELECT SUM(quantity) AS total_in_salary FROM role GROUP BY department_id', function (err, results) {
+        //         console.log(results);
+        //         init();
+        //     });
+        //     break;
+        // }
     }
 }
 
@@ -164,7 +164,7 @@ const init = async () => {
             'Add Employee',
             'Add Department',
             'Add Role',
-            'View Department Payrole'
+            // 'View Department Payrole'
         ],
         name: 'type',
     })
